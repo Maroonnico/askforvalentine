@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffe6e6;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #ff4d4d;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+        button {
+            font-size: 27px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .yes {
+            background-color: #ff4d4d;
+            color: white;
+            margin-right: 150px;
+        }
+        .no {
+            background-color: #ccc;
+            color: black;
+            position: absolute;
+            margin-left: 150px;
+            transition: 0.5s;
+        }
+        #message {
+            display: none;
+            margin-top: 20px;
+        }
+        #message img {
+            width: 200px;
+            margin-top: 10px;
+        }
+        #pleaseContainer {
+            margin-top: 20px;
+        }
+        .pleaseMessage {
+            font-size: 20px;
+            color: #ff4d4d;
+        }
+        .firstimg {
+             clip-path: inset(0 0 11% 0); /* Crop bottom */
+             width: 325px;
+             height: 325px;
+        }
+        .secondimg {
+             width: 80px;
+             height: 230px;
+        }
+    </style>
+</head>
+<body>
+    <img src="cats.gif" alt="Cute happy image" class="firstimg">
+    <h1>Will you be my baby for Valentine's? ❤️</h1>
+    <div class="buttons">
+        <button class="yes" onclick="showMessage()">Yes</button>
+        <button class="no" id="noButton">No</button>
+    </div>
+    <div id="message" style="display: none;">
+        <h2>Yieeeee I wuvvv uuuuu! </h2>
+        <img src="yespic.jpg" alt="Cute happy image" class="secondimg">
+    </div>
+    <div id="pleaseContainer"></div>
+
+    <audio id="bgMusic" src="Sixpence None the Richer - Kiss Me (Instrumental Edit).mp3" autoplay loop></audio>
+
+    <script>
+        const noButton = document.getElementById("noButton");
+        const pleaseContainer = document.getElementById("pleaseContainer");
+        const yesMessage = document.getElementById("message");
+        let initialNoButtonPosition = { x: 0, y: 0 };
+        const pleaseMessages = ["Please? 🥺", "Sige naaaaa 🥺", "ihhhh 🥺", "huhuhuhu 🥺"];
+        let lastMessage = "";
+        let repeatCount = 0;
+
+        window.onload = function() {
+            let rect = noButton.getBoundingClientRect();
+            initialNoButtonPosition.x = rect.left;
+            initialNoButtonPosition.y = rect.top;
+        };
+
+        noButton.addEventListener("mouseover", function() {
+            let maxX = window.innerWidth * 0.5; // Reduce movement area
+            let maxY = window.innerHeight * 0.5;
+            let newX = Math.random() * maxX - maxX / 2;
+            let newY = Math.random() * maxY - maxY / 2;
+            noButton.style.transform = `translate(${newX}px, ${newY}px)`;
+            yesMessage.style.display = "none";
+            
+            let newMessage;
+            do {
+                newMessage = pleaseMessages[Math.floor(Math.random() * pleaseMessages.length)];
+            } while (newMessage === lastMessage && repeatCount >= 2);
+            
+            if (newMessage === lastMessage) {
+                repeatCount++;
+            } else {
+                repeatCount = 1;
+                lastMessage = newMessage;
+            }
+            
+            let pleaseMessage = document.createElement("div");
+            pleaseMessage.className = "pleaseMessage";
+            pleaseMessage.textContent = newMessage;
+            pleaseContainer.appendChild(pleaseMessage);
+        });
+
+        function showMessage() {
+            yesMessage.style.display = "block";
+            pleaseContainer.innerHTML = ""; // Remove all "Please?" messages
+            noButton.style.transform = "translate(0, 0)"; // Reset the No button position
+            lastMessage = "";
+            repeatCount = 0;
+        }
+    </script>
+</body>
+</html>
